@@ -1,5 +1,5 @@
 "use client"
-
+import { supabase } from "../supabaseClient"
 import { useState,useEffect } from "react"
 import SignIn from "../components/sign-in"
 import SignUp from "../components/sign-up"
@@ -18,6 +18,15 @@ export default function AuthPage() {
 
     // Add theme class to document
     document.documentElement.setAttribute("data-theme", prefersDark ? "dark" : "light")
+  
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
   }, [])
 
   const toggleTheme = () => {
@@ -42,16 +51,26 @@ export default function AuthPage() {
             </div>
 
             <div className="right-actions">
-              <button onClick={() => setSession(null)} className="signout-button">
+              <button onClick={async() => {
+                await supabase.auth.signOut()
+                setSession(null)
+                }} className="signout-button">
                 Sign out
               </button>
+              
               <button onClick={toggleTheme} className="theme-toggle">
                 {theme === "light" ? "🌙" : "☀️"}
               </button>
             </div>
           </div>
         </div>
-        <ExpenseTracker />
+
+
+        <div className="dashboard-content">
+          <ExpenseTracker session={session}/>
+        </div>
+
+
         
       </>
     )

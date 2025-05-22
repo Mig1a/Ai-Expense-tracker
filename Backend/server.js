@@ -5,7 +5,10 @@ const { authenticateUser } = require('./authMiddleware')
 require('dotenv').config()
 
 const app = express()
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 app.use(express.json())
 
 // SIGNUP Route
@@ -41,18 +44,42 @@ app.post('/signup', async (req, res) => {
 
 
 app.post('/expenses', authenticateUser, async (req, res) => {
-    const user_id = req.user.id
-    const { amount, category, description, payment_method, expense_date } = req.body
-  
-    const { data, error } = await supabaseAdmin.from('expenses').insert([
-      { user_id, amount, category, description, payment_method, expense_date }
-    ])
-  
-    if (error) return res.status(500).json({ error: error.message })
-    res.status(201).json({ message: 'Expense added', data })
-  })
-  
-  const PORT = process.env.PORT || 5000
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+  const user_id = req.user?.id // From the auth middleware
+
+  const { amount, category, expense_date } = req.body
+
+  if (!amount || !category || !expense_date) {
+    return res.status(400).json({ error: 'Missing required fields' })
+  }
+
+  const { data, error } = await supabase.from('expenses').insert([
+    { user_id, amount, category, expense_date }
+  ])
+
+  if (error) {
+    return res.status(500).json({ error: error.message })
+  }
+
+  res.status(201).json({ message: 'Expense added', data })
+})
 
 
+// GET /expenses - Get all expenses for the authenticated user
+app.get('/expenses', authenticateUser, async (req, res) => {
+  const user_id = req.user.id
+
+  const { data, error } = await supabase
+    .from('expenses')
+    .select('*')
+    .eq('user_id', user_id)
+    .order('expense_date', { ascending: false })
+
+  if (error) {
+    return res.status(500).json({ error: error.message })
+  }
+
+  res.status(200).json(data)
+})
+
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

@@ -1,62 +1,118 @@
-import React, { useState } from 'react';
-import '../styles/dashboard.css';
+import React, { useState, useEffect } from 'react'
+import '../styles/dashboard.css'
+import { supabase } from '../supabaseClient'
 
-const ExpenseTracker = () => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('0.00');
-  const [category, setCategory] = useState('General');
-  const [expenses, setExpenses] = useState([]);
+const ExpenseTracker = ({ session }) => {
+  const [amount, setAmount] = useState('0.00')
+  const [category, setCategory] = useState('General')
+  const [expenses, setExpenses] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const handleAddExpense = (e) => {
-    e.preventDefault();
-    if (!description || parseFloat(amount) <= 0) return;
-    
-    const newExpense = {
-      id: Date.now(),
-      description,
-      amount: parseFloat(amount).toFixed(2),
-      category,
-      date: new Date().toLocaleDateString()
-    };
-    
-    setExpenses([newExpense, ...expenses]);
-    setDescription('');
-    setAmount('0.00');
-    setCategory('General');
-  };
+  const expense_date = new Date().toISOString().split('T')[0]
 
-  const totalExpenses = expenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0);
-  const expenseCount = expenses.length;
+  // ✅ Fetch expenses on mount
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const token = session?.access_token
+        const res = await fetch('http://localhost:5000/expenses', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+
+        const data = await res.json()
+
+        if (!res.ok) {
+          alert(data.error || 'Failed to load expenses')
+          return
+        }
+
+        setExpenses(
+          data.map((exp) => ({
+            id: exp.id,
+            amount: parseFloat(exp.amount).toFixed(2),
+            category: exp.category,
+            date: new Date(exp.expense_date).toLocaleDateString()
+          }))
+        )
+        setLoading(false)
+      } catch (err) {
+        console.error(err)
+        alert('Error loading expenses.')
+      }
+    }
+
+    if (session) fetchExpenses()
+  }, [session])
+
+  // ✅ Add new expense
+  const handleAddExpense = async (e) => {
+    e.preventDefault()
+    if (parseFloat(amount) <= 0) return
+
+    const { data: sessionData } = await supabase.auth.getSession()
+    const token = session?.access_token || sessionData?.session?.access_token
+
+    if (!token) {
+      alert("You're not signed in.")
+      return
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ amount: parseFloat(amount), category, expense_date })
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        alert(data.error || 'Failed to add expense')
+        return
+      }
+
+      setExpenses([
+        {
+          id: Date.now(),
+          amount: parseFloat(amount).toFixed(2),
+          category,
+          date: new Date().toLocaleDateString()
+        },
+        ...expenses
+      ])
+
+      setAmount('0.00')
+      setCategory('General')
+    } catch (err) {
+      console.error(err)
+      alert('Error connecting to server')
+    }
+  }
+
+  const totalExpenses = expenses.reduce((sum, ex) => sum + parseFloat(ex.amount), 0)
+  const expenseCount = expenses.length
 
   return (
     <div className="expense-tracker">
       <h1>Expense Tracker</h1>
       <p className="subtitle">Track and manage your expenses easily</p>
-      
+
       <div className="tracker-container">
-        {/* Add Expense Section */}
         <div className="add-expense-section">
           <h2>Add Expense</h2>
-          <p>Record a new expense</p>
-          
+          <p>Enter amount and category</p>
+
           <form onSubmit={handleAddExpense}>
             <div className="form-group">
-              <label>Description</label>
-              <p className="hint">What did you spend on?</p>
-              <input 
-                type="text" 
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter description"
-                required
-              />
-            </div>
-            
-            <div className="form-group">
               <label>Amount</label>
-              <p className="hint">$ 0.00</p>
-              <input 
-                type="number" 
+              <input
+                type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 min="0.01"
@@ -64,14 +120,10 @@ const ExpenseTracker = () => {
                 required
               />
             </div>
-            
+
             <div className="form-group">
               <label>Category</label>
-              <p className="hint">General</p>
-              <select 
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
                 <option value="General">General</option>
                 <option value="Food">Food</option>
                 <option value="Transport">Transport</option>
@@ -80,38 +132,31 @@ const ExpenseTracker = () => {
                 <option value="Shopping">Shopping</option>
               </select>
             </div>
-            
-            <div className="divider"></div>
-            
+
             <button type="submit" className="add-button">Add Expense</button>
           </form>
         </div>
-        
-        {/* Summary Section */}
+
         <div className="summary-section">
           <h2>Total Expenses</h2>
           <p className="total-amount">${totalExpenses.toFixed(2)}</p>
-          
+
           <h3>Expense Count</h3>
           <p>{expenseCount}</p>
         </div>
-        
-        {/* Recent Expenses Section */}
+
         <div className="recent-expenses">
           <h2>Recent Expenses</h2>
-          <p className="category-filter">All Categories</p>
-          
-          {expenses.length === 0 ? (
-            <p className="no-expenses">No expenses found. Add some expenses to get started!</p>
+          {loading ? (
+            <p>Loading...</p>
+          ) : expenses.length === 0 ? (
+            <p className="no-expenses">No expenses yet.</p>
           ) : (
             <ul className="expenses-list">
-              {expenses.map(expense => (
-                <li key={expense.id} className="expense-item">
-                  <div className="expense-info">
-                    <span className="expense-desc">{expense.description}</span>
-                    <span className="expense-category">{expense.category}</span>
-                  </div>
-                  <div className="expense-amount">${expense.amount}</div>
+              {expenses.map((ex) => (
+                <li key={ex.id} className="expense-item">
+                  <span>{ex.category}</span>
+                  <span>${ex.amount}</span>
                 </li>
               ))}
             </ul>
@@ -119,7 +164,7 @@ const ExpenseTracker = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ExpenseTracker;
+export default ExpenseTracker
