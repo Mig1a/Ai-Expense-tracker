@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react"
-import "./auth-forms.css"
+import "../styles/auth-forms.css"
 
 export default function SignUp({ onSignUp }) {
   const [email, setEmail] = useState("")

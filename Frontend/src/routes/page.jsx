@@ -1,9 +1,10 @@
 "use client"
 
 import { useState,useEffect } from "react"
-import SignIn from "./sign-in"
-import SignUp from "./sign-up"
-import "./auth-page.css"
+import SignIn from "../components/sign-in"
+import SignUp from "../components/sign-up"
+import ExpenseTracker from "../routes/dashboard"
+import "../styles/auth-page.css"
 
 export default function AuthPage() {
   const [session, setSession] = useState(null)
@@ -27,25 +28,32 @@ export default function AuthPage() {
 
   if (session) {
     return (
-      <div className="auth-container">
-        <div className="theme-toggle-container">
-          <button onClick={toggleTheme} className="theme-toggle">
-            {theme === "light" ? "🌙" : "☀️"}
-          </button>
-        </div>
-        <div className="welcome-card">
-          <div className="welcome-avatar">
-            <span>{session.user.email.charAt(0).toUpperCase()}</span>
+      <>
+        <div className="auth-container">
+          <div className="welcome-card">
+            <div className="left-content">
+              <div className="welcome-avatar">
+                <span>{session.user.email.charAt(0).toUpperCase()}</span>
+              </div>
+              <div className="welcome-content">
+                <h1 className="welcome-title">Welcome Back!</h1>
+                <p className="welcome-message">You're successfully signed in as {session.user.email}</p>
+              </div>
+            </div>
+
+            <div className="right-actions">
+              <button onClick={() => setSession(null)} className="signout-button">
+                Sign out
+              </button>
+              <button onClick={toggleTheme} className="theme-toggle">
+                {theme === "light" ? "🌙" : "☀️"}
+              </button>
+            </div>
           </div>
-          <h1 className="welcome-title">Welcome Back!</h1>
-          <p className="welcome-message">You're successfully signed in as {session.user.email}</p>
-          <div className="button-container">
-            <button onClick={() => setSession(null)} className="signout-button">
-              Sign out
-            </button>
-          </div>
         </div>
-      </div>
+        <ExpenseTracker />
+        
+      </>
     )
   }
 
