@@ -7,7 +7,8 @@ require('dotenv').config()
 
 const app = express()
 app.use(cors({
-  origin: 'ai-expense-tracker-gbjn.vercel.app',
+  origin: 'https://ai-expense-tracker-gbjn-igxrj0we1-million-aboyes-projects.vercel.app
+',
   credentials: true
 }))
 app.use(express.json())
