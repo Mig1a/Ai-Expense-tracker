@@ -41,7 +41,7 @@ A full-stack web application that allows users to track daily expenses and get i
 ## Video Walkthrough
 
 
-Below is a walkthrough of the Crowdfund Arcade application:
+Below is a walkthrough of the application:
 
 <img src='/AI-expense.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
