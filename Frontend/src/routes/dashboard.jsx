@@ -15,7 +15,7 @@ const ExpenseTracker = ({ session }) => {
     const fetchExpenses = async () => {
       try {
         const token = session?.access_token
-        const res = await fetch('http://localhost:5000/expenses', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/expenses`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -61,7 +61,7 @@ const ExpenseTracker = ({ session }) => {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/expenses', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
