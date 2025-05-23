@@ -5,6 +5,7 @@ import SignIn from "../components/sign-in"
 import SignUp from "../components/sign-up"
 import ExpenseTracker from "../routes/dashboard"
 import "../styles/auth-page.css"
+import AIInsights from "../components/AIInsights.jsx"
 
 export default function AuthPage() {
   const [session, setSession] = useState(null)
@@ -57,7 +58,7 @@ export default function AuthPage() {
                 }} className="signout-button">
                 Sign out
               </button>
-              
+
               <button onClick={toggleTheme} className="theme-toggle">
                 {theme === "light" ? "🌙" : "☀️"}
               </button>
@@ -67,7 +68,9 @@ export default function AuthPage() {
 
 
         <div className="dashboard-content">
+          
           <ExpenseTracker session={session}/>
+          
         </div>
 
 

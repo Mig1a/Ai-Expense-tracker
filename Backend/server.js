@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const { supabase } = require('./supabaseClient')
 const { authenticateUser } = require('./authMiddleware')
+const { OpenAI } = require("openai");
 require('dotenv').config()
 
 const app = express()
@@ -10,6 +11,10 @@ app.use(cors({
   credentials: true
 }))
 app.use(express.json())
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 // SIGNUP Route
 app.post('/signup', async (req, res) => {
@@ -80,6 +85,64 @@ app.get('/expenses', authenticateUser, async (req, res) => {
 
   res.status(200).json(data)
 })
+
+
+app.get("/insights", authenticateUser, async (req, res) => {
+  const userId = req.user.id;
+  const range = req.query.range || "yearly";
+
+  const now = new Date();
+  let startDate;
+
+  // Determine the start date based on requested range
+  let sinceDate = new Date()
+  if (range === "weekly") sinceDate.setDate(sinceDate.getDate() - 7)
+  else if (range === "monthly") sinceDate.setMonth(sinceDate.getMonth() - 1)
+  else sinceDate.setFullYear(sinceDate.getFullYear() - 1)
+
+  // Fetch expenses filtered by user and date
+  const { data: expenses, error } = await supabase
+    .from("expenses")
+    .select("*")
+    .eq("user_id", userId)
+    .gte("expense_date", sinceDate.toISOString().split("T")[0]);
+
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!expenses || expenses.length === 0) {
+    return res.status(404).json({ message: `No ${range} expenses found to analyze.` });
+  }
+
+  // Create prompt for OpenAI
+  const prompt = `You're a smart, friendly financial assistant. Review the user's ${range} expenses below and offer 2–3 thoughtful, helpful financial insights.
+
+  Avoid repeating the raw data — focus on patterns, habits, or areas where the user might want to improve or pay attention. Write in a simple, conversational tone.
+
+  , Write plain-language insights in paragraph form, not as numbered breakdowns or lists of percentages. Here are the expenses:
+  ${JSON.stringify(expenses, null, 2)}
+  "Don't use markdown symbols like ** or ###."`;
+
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 200,
+      temperature: 0.7,
+    });
+
+    const insights = response.choices[0].message.content.trim();
+    return res.status(200).json({ insights });
+
+  } catch (err) {
+    console.error("OpenAI error:", err.message);
+    return res.status(500).json({ error: "Failed to generate AI insights." });
+  }
+});
+
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))

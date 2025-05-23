@@ -1,0 +1,95 @@
+/* AI Insights Styles */
+.ai-insights-box {
+  background: var(--bg-card, #1e293b);
+  padding: 24px;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color, #334155);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-insights-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #ff9500, #ff2d55);
+}
+
+.ai-insights-box .text-orange-300 {
+  color: #fdba74;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-insights-box button {
+  background-color: var(--bg-secondary, #0f172a);
+  color: var(--text-secondary, #94a3b8);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 0.375rem;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-insights-box button:hover {
+  background-color: var(--bg-muted, #334155);
+  color: var(--text-primary, #ffffff);
+}
+
+.ai-insights-box button.bg-purple-600 {
+  background-color: var(--button-primary, #6366f1);
+  color: white;
+  border-color: var(--button-primary, #6366f1);
+}
+
+.ai-insights-box .bg-slate-800 {
+  background-color: var(--bg-secondary, #0f172a);
+  border-radius: 0.375rem;
+  padding: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.ai-insights-box .text-slate-100 {
+  color: var(--text-primary, #ffffff);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.ai-insights-box .text-slate-400 {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ai-insights-box .flex.justify-between {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .ai-insights-box .flex.gap-2 {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai-insights-box {
+    padding: 20px;
+  }
+  
+  .ai-insights-box .bg-slate-800 {
+    padding: 16px;
+  }
+}

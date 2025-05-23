@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../styles/dashboard.css'
 import { supabase } from '../supabaseClient'
-
+import AIInsights from '../components/AIInsights'
 const ExpenseTracker = ({ session }) => {
   const [amount, setAmount] = useState('0.00')
   const [category, setCategory] = useState('General')
@@ -139,11 +139,15 @@ const ExpenseTracker = ({ session }) => {
 
         <div className="summary-section">
           <h2>Total Expenses</h2>
-          <p className="total-amount">${totalExpenses.toFixed(2)}</p>
+          <p className="total-amount">{totalExpenses.toFixed(2)}</p>
 
           <h3>Expense Count</h3>
           <p>{expenseCount}</p>
         </div>
+        <div className="ai-insights-wrapper">
+            <AIInsights session={session} />
+        </div>
+        
 
         <div className="recent-expenses">
           <h2>Recent Expenses</h2>

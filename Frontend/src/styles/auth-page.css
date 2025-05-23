@@ -64,6 +64,7 @@ body {
 }
 
 .auth-tabs-container {
+  margin-top: 7rem;
   width: 100%;
   max-width: 480px;
 }
