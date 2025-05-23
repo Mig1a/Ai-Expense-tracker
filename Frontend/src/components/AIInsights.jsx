@@ -13,7 +13,7 @@ const AIInsights = ({ session }) => {
     const token = session?.access_token
 
     try {
-      const res = await fetch(`http://localhost:5000/insights?range=${timeframe}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/insights?range=${timeframe}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
