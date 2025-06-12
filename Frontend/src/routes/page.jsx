@@ -72,9 +72,6 @@ export default function AuthPage() {
           <ExpenseTracker session={session}/>
           
         </div>
-
-
-        
       </>
     )
   }
@@ -91,6 +88,13 @@ export default function AuthPage() {
           <div className="brand-logo">$</div>
           <h1 className="brand-name">Smart Expense Tracker</h1>
         </div>
+        <div class="demo-credentials-banner">
+          <span class="demo-icon">ℹ️</span>
+          <span>
+            Use <strong>demo@minimals.cc</strong> with password <strong>@2Minimal</strong>
+          </span>
+        </div>
+
         <div className="tabs">
           <div className="tab-list">
             <button
