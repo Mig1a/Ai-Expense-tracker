@@ -6,8 +6,13 @@ const { OpenAI } = require("openai");
 require('dotenv').config()
 
 const app = express()
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ai-expense-tracker-gbjn.vercel.app",
+  "https://ai-expense-tracker-gbjn-igxrj0we1-million-aboyes-projects.vercel.app"
+];
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: allowedOrigins,
   credentials: true
 }))
 app.use(express.json())
