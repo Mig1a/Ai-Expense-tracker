@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import '../styles/dashboard.css'
 import { supabase } from '../supabaseClient'
 import AIInsights from '../components/AIInsights'
+
+
 const ExpenseTracker = ({ session }) => {
   const [amount, setAmount] = useState('0.00')
   const [category, setCategory] = useState('General')
