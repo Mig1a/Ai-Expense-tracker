@@ -66,22 +66,11 @@ body {
 }
 
 /* Dashboard container - added to fix the gap */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: var(--bg-secondary);
-}
-
-.dashboard-content {
-  padding: 0;
-  flex: 1;
-}
 
 /* Expense Tracker Styles */
 .expense-tracker {
   max-width: 100%;
-  margin: 0 auto;
+  margin: 4rem;
   padding: 0 20px;
   font-family: var(--font-sans);
   color: var(--text-primary);
@@ -101,7 +90,7 @@ body {
 
 .expense-tracker h1 {
   color: var(--text-primary);
-  margin-top: 20px; /* Reduced from default */
+  
   margin-bottom: 5px;
   font-size: 2.2rem;
   font-weight: 700;
@@ -155,10 +144,7 @@ body {
   border-radius: 12px 12px 0 0;
 }
 
-.add-expense-section:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
+
 
 .add-expense-section h2 {
   margin-top: 0;
@@ -317,10 +303,7 @@ body {
   border-radius: 12px 12px 0 0;
 }
 
-.summary-section:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
+
 
 .summary-section h2 {
   margin-top: 0;
@@ -361,6 +344,12 @@ body {
   color: var(--text-secondary);
 }
 
+.expense-chart-wrapper {
+  
+}
+.ai-insights-wrapper {
+  
+}
 .recent-expenses {
   grid-column: 1 / -1;
   background: var(--bg-primary);

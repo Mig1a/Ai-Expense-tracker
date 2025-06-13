@@ -57,7 +57,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 8rem;
+  margin-bottom: 1rem;
   background-color: var(--bg-secondary);
   position: relative;
 }

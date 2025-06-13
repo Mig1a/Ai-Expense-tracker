@@ -147,11 +147,11 @@ const ExpenseTracker = ({ session }) => {
           <p>{expenseCount}</p>
         </div>
         
-        <div className="expense-chart-wrapper">
+        <div >
           <ExpensePieChart expenses={expenses} />
         </div>
 
-        <div className="ai-insights-wrapper">
+        <div>
             <AIInsights session={session} />
         </div>
         
