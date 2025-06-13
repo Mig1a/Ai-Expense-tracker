@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
-
+import "../styles/piechart.css"
 const COLORS = {
   Food: "var(--food-color)",
   Transport: "var(--transport-color)",

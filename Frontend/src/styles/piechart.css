@@ -1,0 +1,96 @@
+/* Expense Chart Styles */
+.expense-chart-container {
+  background: var(--bg-primary);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  margin-top: 20px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.expense-chart-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+  border-radius: 12px 12px 0 0;
+}
+
+.expense-chart-container:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.expense-chart-container h2 {
+  margin-top: 0;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.chart-wrapper {
+  height: 300px;
+  width: 100%;
+}
+
+.no-data-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* Tooltip styles */
+.chart-tooltip {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: var(--shadow-md);
+  min-width: 120px;
+}
+
+.tooltip-category {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.tooltip-value {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-bottom: 3px;
+}
+
+.tooltip-percent {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chart-wrapper {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .expense-chart-container {
+    padding: 20px;
+  }
+
+  .chart-wrapper {
+    height: 220px;
+  }
+}
