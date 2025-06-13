@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../styles/dashboard.css'
 import { supabase } from '../supabaseClient'
 import AIInsights from '../components/AIInsights'
-
+import ExpensePieChart from "../components/expense-pie-chart"
 
 const ExpenseTracker = ({ session }) => {
   const [amount, setAmount] = useState('0.00')
@@ -146,6 +146,11 @@ const ExpenseTracker = ({ session }) => {
           <h3>Expense Count</h3>
           <p>{expenseCount}</p>
         </div>
+        
+        <div className="expense-chart-wrapper">
+          <ExpensePieChart expenses={expenses} />
+        </div>
+
         <div className="ai-insights-wrapper">
             <AIInsights session={session} />
         </div>

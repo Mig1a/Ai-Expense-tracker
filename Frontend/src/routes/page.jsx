@@ -91,7 +91,7 @@ export default function AuthPage() {
         <div class="demo-credentials-banner">
           <span class="demo-icon">ℹ️</span>
           <span>
-            Use <strong>demo@minimals.cc</strong> with password <strong>@2Minimal</strong>
+            Use <strong>demo@expense.cc</strong> with password <strong>2expense?</strong>
           </span>
         </div>
 
