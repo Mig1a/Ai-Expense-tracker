@@ -86,7 +86,7 @@ export default function AuthPage() {
       <div className="auth-tabs-container">
         <div className="auth-brand">
           <div className="brand-logo">$</div>
-          <h1 className="brand-name">Smart Expense Tracker</h1>
+          <h1 className="brand-name">Smart Expense Tracker.</h1>
         </div>
         <div class="demo-credentials-banner">
           <span class="demo-icon">ℹ️</span>
