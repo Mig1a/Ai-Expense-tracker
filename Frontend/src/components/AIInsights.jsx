@@ -40,26 +40,26 @@ const AIInsights = ({ session }) => {
   return (
    
     <div className="ai-insights-box">
-    <div className="insights-header">
+      <div className="insights-header">
         <div className="insights-title">
-        <span>✨</span>
-        <span>AI Insights</span>
+          <span>✨</span>
+          <span>AI Insights</span>
         </div>
 
         <div className="insights-tabs">
-        {['weekly', 'monthly', 'yearly'].map((tab) => (
-            <button
-            key={tab}
-            onClick={() => handleTabClick(tab)}
-            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
-            >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-        ))}
+          {['weekly', 'monthly', 'yearly'].map((tab) => (
+              <button
+              key={tab}
+              onClick={() => handleTabClick(tab)}
+              className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+              >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+          ))}
         </div>
-    </div>
+      </div>
 
-    <div className="insight-body">
+      <div className="insight-body">
         {loading ? (
         <p>⏳ Generating insight…</p>
         ) : insight ? (
@@ -70,7 +70,7 @@ const AIInsights = ({ session }) => {
         ) : (
         <p className="placeholder">Click a timeframe to generate AI insights.</p>
         )}
-    </div>
+      </div>
     </div>
 
   )
