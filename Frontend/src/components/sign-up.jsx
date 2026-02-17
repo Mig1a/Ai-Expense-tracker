@@ -33,6 +33,7 @@ export default function SignUp({ onSignUp }) {
     setIsLoading(false)
     return
   }
+  console.log("API URL:", import.meta.env.VITE_API_URL)
 
   try {
     const res = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
@@ -46,12 +47,23 @@ export default function SignUp({ onSignUp }) {
       }),
     })
 
-    const data = await res.json()
+    // ✅ Safe response parsing (handles empty body + non-JSON)
+    const text = await res.text()
+    let data = null
+    try {
+      data = text ? JSON.parse(text) : null
+    } catch {
+      data = null
+    }
 
     if (!res.ok) {
-      setMsg({ type: "error", text: data.error || "Signup failed" })
+      setMsg({
+        type: "error",
+        text: data?.error || text || `Signup failed (${res.status})`,
+      })
       return
     }
+
 
     // ✅ Backend success — keep your current UI flow
     setMsg({ type: "success", text: "Account created successfully! You can now sign in." })
