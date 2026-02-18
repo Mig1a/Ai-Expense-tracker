@@ -25,7 +25,7 @@ export default function SignIn({ onSignIn }) {
       })
 
       if (error) {
-        setError(error.message)
+        setError(error.message +'hello')
       } else {
         setError(null)
         onSignIn(data.session) // ✅ pass user session to parent component or global state
