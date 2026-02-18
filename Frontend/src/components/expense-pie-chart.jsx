@@ -4,12 +4,12 @@ import { useMemo } from "react"
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts"
 import "../styles/piechart.css"
 const COLORS = {
-  Food: "var(--food-color)",
-  Transport: "var(--transport-color)",
-  Entertainment: "var(--entertainment-color)",
-  Utilities: "var(--utilities-color)",
-  Shopping: "var(--shopping-color)",
-  General: "var(--general-color)",
+  food: "var(--food-color)",
+  transport: "var(--transport-color)",
+  entertainment: "var(--entertainment-color)",
+  utilities: "var(--utilities-color)",
+  shopping: "var(--shopping-color)",
+  general: "var(--general-color)",
 }
 
 const RADIAN = Math.PI / 180
@@ -50,7 +50,7 @@ const ExpensePieChart = ({ expenses }) => {
   const chartData = useMemo(() => {
     // Group expenses by category and sum amounts
     const categoryMap = expenses.reduce((acc, expense) => {
-      const category = expense.category
+      const category = String(expense.category || "").trim().toLowerCase()
       if (!acc[category]) {
         acc[category] = 0
       }
